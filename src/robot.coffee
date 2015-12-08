@@ -446,7 +446,9 @@ class Robot
     if herokuUrl
       herokuUrl += '/' unless /\/$/.test herokuUrl
       @pingIntervalId = setInterval =>
-        HttpClient.create("#{herokuUrl}hubot/ping").post() (err, res, body) =>
+        client = HttpClient.create("#{herokuUrl}hubot/ping")
+        client.auth(user, pass) if user and pass
+        client.post() (err, res, body) =>
           @logger.info 'keep alive ping!'
       , 5 * 60 * 1000
 
